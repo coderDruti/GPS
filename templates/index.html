@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clustering on Gene Expression Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h1>Gene Expression Clustering</h1>
+    <p>
+      Click any of the below buutons to see the clustering results of the
+      corresponding datasets
+    </p>
+    <div>
+      <!-- <button id="GSE0">GSE108474</button>
+      <button id="GSE1">GSE108474</button>
+      <button id="GSE2">GSE108474</button>
+      <button id="GSE3">GSE108474</button> -->
+      <a href="#" title="results" id="GSE0"
+        >GSE108474</a
+      >
+    </div>
+    <div id="output">
+      <canvas id="myChart"></canvas>
+      <caption id="canvasCaption"></caption>
+    </div>
+    <script>
+      document.getElementById("GSE0").addEventListener("click", async () => {
+        try {
+          const text = document.getElementById("GSE0").innerText;
+          console.log(text);
+          const response = await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ key: text }),
+          });
+          // );
+          // console.log(JSON.stringify({data:text}))
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log(data);
+          const ctx = document.getElementById("myChart").getContext("2d");
+          const colors = ["purple", "yellow"];
+          const datasets = {
+            data: {
+              x:data0,
+              y:data1,
+            },
+            backgroundColor: colors,
+          };
+          console.log(datasets);
+          new Chart(ctx, {
+            type: "scatter",
+            data: { datasets },
+            options: {
+              scales: {
+                x: { title: { display: true, text: "Principal component 1" } },
+                y: { title: { display: true, text: "Principal component 2" } },
+              },
+            },
+          });
+          // document.getElementById("canvasCaption").innerText = score;
+        } catch (error) {
+          console.error("Error fetching scatter data", error);
+        }
+      });
+    </script>
+  </body>
+</html>
